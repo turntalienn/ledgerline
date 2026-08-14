@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: ledgerline
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ledgerline
+    username: ledgerline
+    password: ledgerline
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc.batch_size: 50
+        order_updates: true   # flush UPDATEs in primary-key order: same lock order as the row-lock strategy
+  flyway:
+    enabled: true
+  threads:
+    virtual:
+      enabled: false   # Enable explicitly when comparing virtual and platform threads
+  mvc:
+    problemdetails:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+
+ledgerline:
+  balance:
+    strategy: row-lock   # row-lock | optimistic | sharded  (restart to switch)
+    shards: 8
+    retry:
+      max-attempts: 20
+      base-backoff: 2ms
+      max-backoff: 100ms
+

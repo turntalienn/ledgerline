@@ -1,0 +1,23 @@
+# Build output and local tools
+/target/
+/target-perflens/
+/.idea/
+/.vscode/
+/.agents/
+/.codex/
+/.aws/
+*.iml
+.DS_Store
+__pycache__/
+*.pyc
+
+# Local configuration and diagnostic output
+.env
+.env.*
+!.env.example
+*.log
+*.jfr
+/artifacts/
+
+# Working notes, learning guides and local benchmark reports
+/docs/
