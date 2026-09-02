@@ -37,3 +37,15 @@ ledgerline:
       base-backoff: 2ms
       max-backoff: 100ms
 
+  fees:
+    enabled: false       # turn on for the fee-pricing experiment (k6/fee-experiment.js)
+    arms:
+      - name: flat-5
+        flat: 500                    # Rs 5 on every transfer
+      - name: pct-50bps
+        bps: 50                      # 0.5%
+      - name: flat-2-plus-20bps-cap-25
+        flat: 200
+        bps: 20
+        cap: 2500
+
