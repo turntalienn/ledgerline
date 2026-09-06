@@ -1,0 +1,27 @@
+# Background jobs off: tests call them directly so they are deterministic.
+ledgerline:
+  outbox:
+    relay:
+      enabled: false
+    consumers:
+      enabled: false
+  payments:
+    resolver:
+      enabled: false
+  recon:
+    schedule:
+      enabled: false
+  psp:
+    read-timeout: 300ms
+    retry:
+      initial-backoff: 10ms
+  mock-psp:
+    faults:            # calm by default; each test turns on the fault it is about
+      latency: 0ms
+      hang: 600ms      # longer than read-timeout, so a "timeout" fault really times out
+      failure-rate: 0
+      timeout-rate: 0
+      decline-rate: 0
+      webhook-drop-rate: 0
+      webhook-duplicate-rate: 0
+      settlement-skew-rate: 0
