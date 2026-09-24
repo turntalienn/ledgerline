@@ -21,6 +21,21 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  kafka:
+    bootstrap-servers: localhost:19092   # Redpanda from compose.yaml
+    producer:
+      acks: all
+      properties:
+        enable.idempotence: true   # no duplicates from the producer's own retries
+        linger.ms: 5
+        max.block.ms: 5000          # fail fast when the broker is down; the relay retries next poll
+        request.timeout.ms: 5000
+        delivery.timeout.ms: 10000
+    consumer:
+      auto-offset-reset: earliest
+    admin:
+      operation-timeout: 5s
+      close-timeout: 5s
 
 management:
   endpoints:
@@ -48,4 +63,14 @@ ledgerline:
         flat: 200
         bps: 20
         cap: 2500
+
+  outbox:
+    topic: ledger.events
+    partitions: 3
+    batch-size: 100
+    relay:
+      enabled: true
+      poll-interval-ms: 500
+    consumers:
+      enabled: true
 

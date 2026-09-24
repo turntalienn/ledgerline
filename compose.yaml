@@ -10,5 +10,21 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  # Kafka-compatible broker for the outbox relay. Single node, dev mode: fine for a lab, not for prod.
+  redpanda:
+    image: docker.io/redpandadata/redpanda:v25.3.18
+    command:
+      - redpanda
+      - start
+      - --mode=dev-container
+      - --smp=1
+      - --kafka-addr=internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr=internal://redpanda:9092,external://localhost:19092
+    ports:
+      - "19092:19092"   # the app connects here (spring.kafka.bootstrap-servers)
+
+  # The mock PSP runs inside the app (/mock-psp) and injects its own faults, so there is no
+  # Toxiproxy here. Add it later if you want network-level faults (latency, resets) on top.
+
 volumes:
   pgdata:

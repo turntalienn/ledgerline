@@ -5,6 +5,7 @@ import ledgerline.account.AccountRef;
 import ledgerline.account.AccountRepository;
 import ledgerline.ledger.balance.BalanceStrategy;
 import ledgerline.ledger.balance.Leg;
+import ledgerline.outbox.OutboxWriter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * The one way money moves. Transfers and payments both end up here:
  * validate the entry, update cached balances through the configured strategy (which locks),
- * write the journal entry, all in the caller's transaction.
+ * write the journal entry, and write the outbox event, all in the caller's transaction.
  */
 @Component
 public class LedgerPoster {
@@ -34,16 +35,18 @@ public class LedgerPoster {
     private final AccountRepository accounts;
     private final BalanceStrategy balances;
     private final JournalEntryRepository entries;
+    private final OutboxWriter outbox;
 
     public LedgerPoster(AccountRepository accounts, BalanceStrategy balances,
-                        JournalEntryRepository entries) {
+                        JournalEntryRepository entries, OutboxWriter outbox) {
         this.accounts = accounts;
         this.balances = balances;
         this.entries = entries;
+        this.outbox = outbox;
     }
 
     // MANDATORY: posting outside a transaction would let the balance update, the entry and the
-    // commit separately. Fail loudly instead.
+    // event commit separately. Fail loudly instead.
     @Transactional(propagation = Propagation.MANDATORY)
     public JournalEntry post(JournalEntry entry) {
         entry.assertBalanced();
@@ -67,6 +70,10 @@ public class LedgerPoster {
 
         entries.save(entry);
 
+        String eventType = entry.getKind() == EntryKind.TRANSFER ? "TransferPosted" : "PaymentReceived";
+        List<LedgerEvent.Line> lines = legs.stream().map(l -> new LedgerEvent.Line(l.accountId(), l.amount())).toList();
+        outbox.append("journal_entry", entry.getId().toString(), eventType,
+                new LedgerEvent(entry.getId(), entry.getReference(), entry.getKind(), entry.getFeeArm(), lines, Instant.now()));
         return entry;
     }
 }
