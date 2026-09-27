@@ -74,3 +74,39 @@ ledgerline:
     consumers:
       enabled: true
 
+  psp:
+    # Read lazily, after the web server has started, so ${local.server.port} resolves.
+    base-url: http://localhost:${local.server.port:${server.port:8080}}/mock-psp
+    connect-timeout: 500ms
+    read-timeout: 1s
+    retry:
+      max-attempts: 4
+      initial-backoff: 100ms
+      multiplier: 2.0
+    circuit-breaker:
+      failure-rate-threshold: 50
+      sliding-window-size: 20
+      minimum-calls: 10
+      open-duration: 10s
+
+  payments:
+    max-attempts: 8
+    resolver:
+      enabled: true
+      interval-ms: 15000
+      older-than: 10s
+      batch-size: 50
+
+  mock-psp:
+    enabled: true
+    webhook-url: http://localhost:${local.server.port:${server.port:8080}}/webhooks/psp
+    faults:              # it fails on purpose; PUT /mock-psp/faults changes these at runtime
+      latency: 20ms
+      hang: 2s
+      failure-rate: 0.10
+      timeout-rate: 0.05
+      decline-rate: 0.05
+      webhook-drop-rate: 0.10
+      webhook-duplicate-rate: 0.20
+      settlement-skew-rate: 0.01
+
