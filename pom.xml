@@ -65,6 +65,16 @@
     <!-- Boot manages compatible OTel versions; HTTP observations become trace spans. -->
 
     <!-- Retry + circuit breaker around the PSP, used programmatically (no AOP magic) -->
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-retry</artifactId>
+      <version>${resilience4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-circuitbreaker</artifactId>
+      <version>${resilience4j.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
