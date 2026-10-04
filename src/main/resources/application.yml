@@ -110,3 +110,8 @@ ledgerline:
       webhook-duplicate-rate: 0.20
       settlement-skew-rate: 0.01
 
+  recon:
+    schedule:
+      enabled: true
+    cron: "0 30 0 * * *"   # 00:30 UTC, reconciles yesterday
+
