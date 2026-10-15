@@ -52,6 +52,11 @@ class OutboxKafkaTest extends IntegrationTest {
         await().atMost(Duration.ofSeconds(30)).until(() ->
                 meters.counter("ledgerline.consumer.duplicates", "consumer", "notifications").count() > duplicatesBefore);
         assertThat(processed(eventId)).as("the second delivery changed nothing").isEqualTo(1);
+        await().atMost(Duration.ofSeconds(30)).untilAsserted(() -> {
+            assertThat(jdbc.queryForObject("select balance from balance_projection where account_id = ?", Long.class, to.getId())).isEqualTo(100L);
+            assertThat(jdbc.queryForObject("select balance from balance_projection where account_id = ?", Long.class, from.getId())).isEqualTo(900L);
+            assertThat(jdbc.queryForObject("select posting_count from balance_projection where account_id = ?", Long.class, to.getId())).isEqualTo(1L);
+        });
     }
 
     private int processed(UUID eventId) {
