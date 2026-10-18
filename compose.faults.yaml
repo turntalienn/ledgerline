@@ -1,0 +1,8 @@
+# Route PspGateway through this optional TCP proxy to distinguish network faults from mock 5xx.
+services:
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.12.0
+    command: ["-host=0.0.0.0", "-config=/etc/toxiproxy.json"]
+    ports: ["127.0.0.1:8474:8474", "127.0.0.1:8666:8666"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    volumes: ["./observability/toxiproxy.json:/etc/toxiproxy.json:ro,Z"]
