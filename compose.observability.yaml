@@ -1,0 +1,22 @@
+# Optional local lab: all published ports bind to loopback. The JVM runs on the host.
+services:
+  prometheus:
+    image: docker.io/prom/prometheus:v3.2.1
+    ports: ["127.0.0.1:9090:9090"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    volumes: ["./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro,Z"]
+  tempo:
+    image: docker.io/grafana/tempo:2.7.2
+    command: ["-config.file=/etc/tempo.yaml"]
+    ports: ["127.0.0.1:3200:3200", "127.0.0.1:4318:4318"]
+    volumes: ["./observability/tempo.yml:/etc/tempo.yaml:ro,Z"]
+  grafana:
+    image: docker.io/grafana/grafana:11.6.0
+    ports: ["127.0.0.1:3000:3000"]
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro,Z
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro,Z

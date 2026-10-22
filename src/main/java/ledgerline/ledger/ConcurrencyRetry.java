@@ -1,6 +1,8 @@
 package ledgerline.ledger;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import jakarta.persistence.OptimisticLockException;
 import ledgerline.ledger.balance.BalanceProperties;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -22,14 +24,20 @@ public class ConcurrencyRetry {
 
     private final BalanceProperties.Retry config;
     private final MeterRegistry meters;
+    private final ObservationRegistry observations;
 
-    public ConcurrencyRetry(BalanceProperties props, MeterRegistry meters) {
+    public ConcurrencyRetry(BalanceProperties props, MeterRegistry meters, ObservationRegistry observations) {
         this.config = props.retry();
         this.meters = meters;
+        this.observations = observations;
     }
 
     public <T> T run(String operation, Supplier<T> transaction) {
-        return runAttempts(operation, transaction);
+        // One span covers retries AND backoff, so the trace shows the latency the caller paid.
+        // Only a bounded operation name is a metric tag; account IDs/keys would explode cardinality.
+        return Observation.createNotStarted("ledgerline.transaction", observations)
+                .lowCardinalityKeyValue("operation", operation)
+                .observe(() -> runAttempts(operation, transaction));
     }
 
     private <T> T runAttempts(String operation, Supplier<T> transaction) {

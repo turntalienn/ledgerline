@@ -1,0 +1,307 @@
+{
+  "uid": "ledgerline-lab",
+  "title": "Ledgerline: contention and delivery",
+  "schemaVersion": 40,
+  "version": 1,
+  "refresh": "5s",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Accepted transfer responses / second",
+      "type": "timeseries",
+      "description": "Includes idempotent replays; use k6 unique-transfer counts for benchmark throughput.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(http_server_requests_seconds_count{uri=\"/transfers\",method=\"POST\",status=\"201\"}[1m]))",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "title": "Transfer p99 latency",
+      "type": "timeseries",
+      "description": "Histogram estimate over one minute; k6 reports client-observed latency instead.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(http_server_requests_seconds_bucket{uri=\"/transfers\",method=\"POST\"}[1m])))",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "title": "Transaction retries / second",
+      "type": "timeseries",
+      "description": "Each retry repeats the entire rolled-back transaction. More retries mean wasted work.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "sum by (operation) (rate(ledgerline_tx_retries_total[1m])) or on() vector(0)",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "title": "Transfer non-2xx responses / second",
+      "type": "timeseries",
+      "description": "409 means contention retries were exhausted; other statuses need separate investigation.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "sum by (status) (rate(http_server_requests_seconds_count{uri=\"/transfers\",status!~\"2..\"}[1m])) or on() vector(0)",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "title": "Hikari connections waiting",
+      "type": "timeseries",
+      "description": "A rising queue can mean the database is slow or transactions hold connections too long.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "hikaricp_connections_pending",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 6,
+      "title": "Hikari active connections",
+      "type": "timeseries",
+      "description": "Virtual threads do not create more database connections. Compare this with pending connections.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "hikaricp_connections_active",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 7,
+      "title": "Unpublished outbox events",
+      "type": "timeseries",
+      "description": "Committed events waiting for Kafka acknowledgement; counts refresh every five seconds.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "ledgerline_outbox_pending",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 8,
+      "title": "Projection events outstanding",
+      "type": "timeseries",
+      "description": "Outbox events not yet committed by balances-v1, including unpublished events. A poisoned partition causes this to grow.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "ledgerline_projection_pending",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 9,
+      "title": "JVM heap used",
+      "type": "timeseries",
+      "description": "Compare heap growth with GC pause time and request load.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "sum(jvm_memory_used_bytes{area=\"heap\"})",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 10,
+      "title": "GC pause time per second",
+      "type": "timeseries",
+      "description": "Time spent in recorded GC pauses; not the percentage of total CPU used by GC.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(jvm_gc_pause_seconds_sum[1m]))",
+          "refId": "A",
+          "legendFormat": "{{operation}}{{status}}{{pool}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      }
+    }
+  ],
+  "tags": [
+    "ledgerline",
+    "local-lab"
+  ]
+}

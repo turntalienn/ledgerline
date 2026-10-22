@@ -38,6 +38,17 @@ spring:
       close-timeout: 5s
 
 management:
+  tracing:
+    enabled: ${TRACING_ENABLED:false} # opt in with the observability profile
+    sampling:
+      probability: 1.0              # a local lab; production normally samples less
+  otlp:
+    tracing:
+      endpoint: ${OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true # Prometheus needs buckets to calculate p95/p99
   endpoints:
     web:
       exposure:

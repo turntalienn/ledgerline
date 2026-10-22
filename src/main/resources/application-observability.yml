@@ -1,0 +1,12 @@
+management:
+  tracing:
+    enabled: true
+ledgerline:
+  observability:
+    enabled: true
+spring:
+  kafka:
+    template:
+      observation-enabled: true
+    listener:
+      observation-enabled: true
