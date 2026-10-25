@@ -1,0 +1,7 @@
+# Requires ./mvnw -Pperflens ... in addition to this Spring profile.
+perflens:
+  enabled: true
+  storage:
+    initialize-schema: false # Flyway V9 is PostgreSQL-compatible; the starter's initializer is MySQL.
+  viewer:
+    enabled: false          # inspect stored reports via SQL; no unauthenticated report UI

@@ -126,3 +126,6 @@ ledgerline:
       enabled: true
     cron: "0 30 0 * * *"   # 00:30 UTC, reconciles yesterday
 
+# The optional Maven profile puts the starter on the classpath. Enable capture separately.
+perflens:
+  enabled: false
