@@ -1,0 +1,18 @@
+name: Verify ledger invariants
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      # Hosted Ubuntu has Docker. Missing Docker must fail CI, not silently skip integration tests.
+      - run: ./mvnw --batch-mode verify
+      - run: python3 scripts/check-test-results.py
+      - run: python3 -m unittest discover -s scripts/tests -v
