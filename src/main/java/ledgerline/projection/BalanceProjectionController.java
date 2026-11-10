@@ -1,11 +1,10 @@
 package ledgerline.projection;
 
+import java.time.Instant;
 import ledgerline.account.AccountNotFoundException;
 import ledgerline.account.AccountRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Instant;
 
 @RestController
 @RequestMapping("/accounts")

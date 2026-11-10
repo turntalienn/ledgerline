@@ -1,9 +1,8 @@
 package ledgerline.payment;
 
+import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import java.time.Duration;
 
 /**
  * Client-side settings for the PSP. The base URL is NOT here: it may contain ${local.server.port},

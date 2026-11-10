@@ -1,5 +1,8 @@
 package ledgerline.support;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.UUID;
 import ledgerline.account.Account;
 import ledgerline.account.AccountRepository;
 import ledgerline.account.AccountType;
@@ -12,10 +15,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.UUID;
 
 /**
  * Base for tests that need the real database. One Postgres container for the whole run (started

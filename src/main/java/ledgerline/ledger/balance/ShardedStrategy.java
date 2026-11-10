@@ -1,14 +1,13 @@
 package ledgerline.ledger.balance;
 
-import ledgerline.ledger.InsufficientFundsException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
+import ledgerline.ledger.InsufficientFundsException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * Strategy (c): split balances. See V4__balance_shards.sql.

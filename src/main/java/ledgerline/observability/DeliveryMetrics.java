@@ -1,11 +1,11 @@
 package ledgerline.observability;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Sample database queues on a timer, not inside Prometheus scrapes. A slow database must not

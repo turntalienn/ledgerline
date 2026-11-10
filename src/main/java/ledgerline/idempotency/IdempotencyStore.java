@@ -1,11 +1,10 @@
 package ledgerline.idempotency;
 
+import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 /**
  * Idempotency keys stored in Postgres, in the same transaction as the work they protect.

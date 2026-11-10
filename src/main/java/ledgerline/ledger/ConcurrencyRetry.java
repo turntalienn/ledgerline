@@ -4,12 +4,11 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.persistence.OptimisticLockException;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 import ledgerline.ledger.balance.BalanceProperties;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
 
 /**
  * Re-runs a WHOLE transaction when it lost a race: an optimistic version check failed, or Postgres

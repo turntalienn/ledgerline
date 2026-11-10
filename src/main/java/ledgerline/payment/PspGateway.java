@@ -6,6 +6,10 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
+import java.net.http.HttpClient;
+import java.time.LocalDate;
+import java.util.UUID;
+import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -16,11 +20,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
-
-import java.net.http.HttpClient;
-import java.time.LocalDate;
-import java.util.UUID;
-import java.util.function.Supplier;
 
 /**
  * HTTP client for the PSP, wrapped as Retry(CircuitBreaker(call)).

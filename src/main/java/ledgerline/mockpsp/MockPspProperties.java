@@ -1,9 +1,8 @@
 package ledgerline.mockpsp;
 
+import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import java.time.Duration;
 
 /** The webhook URL is read lazily (it may contain ${local.server.port}), so it is not bound here. */
 @ConfigurationProperties("ledgerline.mock-psp")

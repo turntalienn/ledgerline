@@ -1,6 +1,9 @@
 package ledgerline.payment;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import eu.rekawek.toxiproxy.model.ToxicDirection;
+import java.time.Duration;
 import ledgerline.mockpsp.MockPspBooks;
 import ledgerline.mockpsp.MockPspFaults;
 import ledgerline.mockpsp.MockPspProperties.Faults;
@@ -12,8 +15,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.ToxiproxyContainer;
-import java.time.Duration;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /** Real TCP faults: the provider can commit even when its HTTP response never reaches us. */
 class PaymentNetworkFaultTest extends IntegrationTest {

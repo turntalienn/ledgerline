@@ -1,5 +1,8 @@
 package ledgerline.fees;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.Instant;
 import ledgerline.account.Account;
 import ledgerline.account.SystemAccounts;
 import ledgerline.economics.EconomicsService;
@@ -8,10 +11,6 @@ import ledgerline.transfer.TransferService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
-
-import java.time.Instant;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = "ledgerline.fees.enabled=true")
 class FeeExperimentTest extends IntegrationTest {

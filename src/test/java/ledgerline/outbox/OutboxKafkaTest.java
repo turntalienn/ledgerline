@@ -1,6 +1,11 @@
 package ledgerline.outbox;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+
 import io.micrometer.core.instrument.MeterRegistry;
+import java.time.Duration;
+import java.util.UUID;
 import ledgerline.account.Account;
 import ledgerline.support.IntegrationTest;
 import org.junit.jupiter.api.Test;
@@ -8,12 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.redpanda.RedpandaContainer;
-
-import java.time.Duration;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 
 /** Outbox -> relay -> Redpanda -> consumer, including a redelivery that the consumer must ignore. */
 @TestPropertySource(properties = {

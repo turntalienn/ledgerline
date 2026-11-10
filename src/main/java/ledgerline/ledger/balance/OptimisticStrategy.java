@@ -1,16 +1,15 @@
 package ledgerline.ledger.balance;
 
-import ledgerline.account.Account;
-import ledgerline.account.AccountRepository;
-import ledgerline.ledger.InsufficientFundsException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import ledgerline.account.Account;
+import ledgerline.account.AccountRepository;
+import ledgerline.ledger.InsufficientFundsException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 /** Strategy (b): optimistic locking with Account.@Version, retried by ConcurrencyRetry. */
 @Component

@@ -1,8 +1,7 @@
 package ledgerline.mockpsp;
 
-import org.springframework.stereotype.Component;
-
 import java.util.concurrent.ThreadLocalRandom;
+import org.springframework.stereotype.Component;
 
 /** Current fault settings. Changeable at runtime (PUT /mock-psp/faults) so chaos can start mid-load-test. */
 @Component

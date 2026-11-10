@@ -1,5 +1,12 @@
 package ledgerline.ledger;
 
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import ledgerline.account.AccountNotFoundException;
 import ledgerline.account.AccountRef;
 import ledgerline.account.AccountRepository;
@@ -9,14 +16,6 @@ import ledgerline.outbox.OutboxWriter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * The one way money moves. Transfers and payments both end up here:

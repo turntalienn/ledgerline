@@ -1,8 +1,7 @@
 package ledgerline.fees;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import java.util.List;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("ledgerline.fees")
 public record FeeProperties(boolean enabled, List<FeeArm> arms) {

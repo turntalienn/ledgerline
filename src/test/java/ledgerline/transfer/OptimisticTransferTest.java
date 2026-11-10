@@ -1,12 +1,12 @@
 package ledgerline.transfer;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.micrometer.core.instrument.MeterRegistry;
 import ledgerline.account.Account;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = "ledgerline.balance.strategy=optimistic")
 class OptimisticTransferTest extends TransferContract {

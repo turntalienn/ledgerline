@@ -2,6 +2,9 @@ package ledgerline.projection;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.StandardCharsets;
+import java.util.TreeMap;
+import java.util.UUID;
 import ledgerline.ledger.LedgerPoster.LedgerEvent;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
@@ -10,10 +13,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.nio.charset.StandardCharsets;
-import java.util.TreeMap;
-import java.util.UUID;
 
 /**
  * Eventually consistent balances built solely from Kafka events. Spending still uses the

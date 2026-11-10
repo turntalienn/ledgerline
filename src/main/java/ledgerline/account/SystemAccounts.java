@@ -1,9 +1,8 @@
 package ledgerline.account;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Component;
 
 /** Ids of the SYSTEM accounts seeded by V3__ledger_invariants.sql, looked up once and cached. */
 @Component

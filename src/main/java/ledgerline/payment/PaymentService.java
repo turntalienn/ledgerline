@@ -1,5 +1,11 @@
 package ledgerline.payment;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import ledgerline.account.AccountNotFoundException;
 import ledgerline.account.AccountRef;
 import ledgerline.account.AccountRepository;
@@ -8,13 +14,6 @@ import ledgerline.account.SystemAccounts;
 import ledgerline.common.Hashing;
 import ledgerline.idempotency.IdempotencyKeyReusedException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * POST /payments: a pay-in from the PSP to a customer account.

@@ -1,12 +1,11 @@
 package ledgerline.economics;
 
+import java.time.Duration;
+import java.time.Instant;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.Duration;
-import java.time.Instant;
 
 /** from/to are ISO-8601 instants. Default window: the last 24 hours. */
 @RestController

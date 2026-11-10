@@ -1,5 +1,10 @@
 package ledgerline.payment;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import ledgerline.account.Account;
 import ledgerline.mockpsp.MockPspBooks;
 import ledgerline.mockpsp.MockPspFaults;
@@ -11,12 +16,6 @@ import ledgerline.support.IntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class ReconciliationTest extends IntegrationTest {
 

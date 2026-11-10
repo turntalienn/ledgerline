@@ -1,15 +1,16 @@
 package ledgerline.observability;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+
+import java.time.Duration;
+import java.util.Map;
 import ledgerline.support.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.http.*;
-import java.time.Duration;
-import java.util.Map;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
+import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles({"test", "perflens"})
 class PerfLensIntegrationTest extends IntegrationTest {

@@ -1,14 +1,13 @@
 package ledgerline.payment;
 
-import ledgerline.common.NotFoundException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import ledgerline.common.NotFoundException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 /** Plain JDBC: payments are all conditional inserts and guarded state transitions, which read best as SQL. */
 @Component

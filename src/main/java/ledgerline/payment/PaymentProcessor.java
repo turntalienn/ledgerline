@@ -1,5 +1,8 @@
 package ledgerline.payment;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
 import ledgerline.account.SystemAccounts;
 import ledgerline.common.NotFoundException;
 import ledgerline.ledger.ConcurrencyRetry;
@@ -8,10 +11,6 @@ import ledgerline.ledger.JournalEntry;
 import ledgerline.ledger.LedgerPoster;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Drives a payment to a final state. Three things can try to settle the same payment, in any order

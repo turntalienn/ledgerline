@@ -1,9 +1,8 @@
 package ledgerline.fees;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  * Fee-pricing experiment. Each PAYER is assigned to one arm for good (a between-subjects design),
